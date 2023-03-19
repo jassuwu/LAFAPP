@@ -8,7 +8,9 @@ RUN npm install
 
 COPY . .
 
+
 RUN npx prisma generate
+
 
 # RUN npm run build
 
@@ -27,4 +29,4 @@ COPY . .
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD [ "node", "dist/apps/laf/main.js" ]
+CMD [ "node", "dist/apps/post/main.js" ]
