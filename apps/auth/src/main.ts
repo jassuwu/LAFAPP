@@ -1,12 +1,20 @@
 import { ValidationPipe } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AuthModule } from './auth.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AuthModule);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AuthModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        host: 'auth',
+        port: 3001,
+      }
+    });
+
   app.useGlobalPipes(new ValidationPipe());
-  const configService = app.get(ConfigService);
-  await app.listen(configService.get<number>('AUTH_PORT'));
+  await app.listen();
 }
 bootstrap();

@@ -1,43 +1,84 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Prisma, Post as PostModel } from '@prisma/client';
 import { PostService } from './post.service';
 
+// @Controller('api/post')
+// export class PostController {
+//   constructor(private readonly postService: PostService) { }
+
+//   @Post()
+//   create(@Body() createPostDto: Prisma.PostCreateInput): Promise<PostModel> {
+//     return this.postService.create(createPostDto);
+//   }
+
+//   @Get()
+//   findAll(): Promise<PostModel[]> {
+//     return this.postService.findAll({});
+//   }
+
+//   @Get(':id')
+//   findOne(@Param('id') id: string): Promise<PostModel> {
+//     return this.postService.findOne({
+//       id,
+//     });
+//   }
+
+//   @Patch(':id')
+//   update(@Param('id') id: string, @Body() updatePostDto: Prisma.PostUpdateInput): Promise<PostModel> {
+//     return this.postService.update({
+//       where: {
+//         id,
+//       },
+//       data: updatePostDto,
+//     });
+//   }
+
+//   @Delete(':id')
+//   remove(@Param('id') id: string) {
+//     return this.postService.remove({
+//       id,
+//     });
+//   }
+
+// }
+
 @Controller('api/post')
 export class PostController {
+  // MessagePattern controller
   constructor(private readonly postService: PostService) { }
 
-  @Post()
-  create(@Body() createPostDto: Prisma.PostCreateInput): Promise<PostModel> {
-    return this.postService.create(createPostDto);
+  @MessagePattern({ cmd: 'createPost' })
+  create(@Payload() data: { createPostDto: Prisma.PostCreateInput }): Promise<PostModel> {
+    return this.postService.create(data.createPostDto);
   }
 
-  @Get()
+  @MessagePattern({ cmd: 'findAllPosts' })
   findAll(): Promise<PostModel[]> {
     return this.postService.findAll({});
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<PostModel> {
+  @MessagePattern({ cmd: 'findOnePost' })
+  findOne(@Payload('id') data: { id: string }): Promise<PostModel> {
     return this.postService.findOne({
-      id,
+      id: data.id,
     });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePostDto: Prisma.PostUpdateInput): Promise<PostModel> {
+  @MessagePattern({ cmd: 'updatePost' })
+  update(@Payload('id') data: { id: string, updatePostDto: Prisma.PostUpdateInput }): Promise<PostModel> {
     return this.postService.update({
       where: {
-        id,
+        id: data.id,
       },
-      data: updatePostDto,
+      data: data.updatePostDto,
     });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'removePost' })
+  remove(@Payload('id') data: { id: string }): Promise<PostModel> {
     return this.postService.remove({
-      id,
+      id: data.id,
     });
   }
-
 }

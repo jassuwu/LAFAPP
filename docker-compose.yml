@@ -20,6 +20,10 @@ services:
       - /usr/src/app/node_modules
     ports:
       - '3000:3000'
+    networks:
+      laf-network:
+        aliases:
+          - laf
 
   auth:
     build:
@@ -36,8 +40,10 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    ports:
-      - '3001:3001'
+    networks:
+      laf-network:
+        aliases:
+          - auth
 
   post:
     build:
@@ -54,8 +60,10 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    ports:
-      - '3002:3002'
+    networks:
+      laf-network:
+        aliases:
+          - post
 
   mongodb-primary:
     image: docker.io/bitnami/mongodb:6.0
@@ -68,6 +76,10 @@ services:
       - 'mongodb_master_data:/bitnami/mongodb'
     ports:
       - '27017:27017'
+    networks:
+      laf-network:
+        aliases:
+          - mongodb-primary
 
   mongodb-secondary:
     image: docker.io/bitnami/mongodb:6.0
@@ -79,6 +91,10 @@ services:
       - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
       - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    networks:
+      laf-network:
+        aliases:
+          - mongodb-secondary
 
   mongodb-arbiter:
     image: docker.io/bitnami/mongodb:6.0
@@ -90,7 +106,15 @@ services:
       - MONGODB_INITIAL_PRIMARY_HOST=mongodb-primary
       - MONGODB_INITIAL_PRIMARY_ROOT_PASSWORD=password123
       - MONGODB_REPLICA_SET_KEY=replicasetkey123
+    networks:
+      laf-network:
+        aliases:
+          - mongodb-arbiter
 
 volumes:
   mongodb_master_data:
     driver: local
+
+networks:
+  laf-network:
+    driver: bridge

@@ -1,42 +1,84 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Prisma, User } from '@prisma/client';
 import { UserService } from './user.service';
 
+// @Controller('api/user')
+// export class UserController {
+//   constructor(private readonly userService: UserService) { }
+
+//   @Post()
+//   create(@Body() createUserDto: Prisma.UserCreateInput): Promise<User> {
+//     return this.userService.create(createUserDto);
+//   }
+
+//   @Get()
+//   findAll(): Promise<User[]> {
+//     return this.userService.findAll({});
+//   }
+
+//   @Get(':id')
+//   findOne(@Param('id') id: string): Promise<User> {
+//     return this.userService.findOne({
+//       id,
+//     });
+//   }
+
+//   @Patch(':id')
+//   update(@Param('id') id: string, @Body() updateUserDto: Prisma.UserUpdateInput): Promise<User> {
+//     return this.userService.update({
+//       where: {
+//         id,
+//       },
+//       data: updateUserDto,
+//     });
+//   }
+
+//   @Delete(':id')
+//   remove(@Param('id') id: string) {
+//     return this.userService.remove({
+//       id,
+//     });
+//   }
+// }
+
+
 @Controller('api/user')
 export class UserController {
+  // MessagePattern controller
   constructor(private readonly userService: UserService) { }
 
-  @Post()
-  create(@Body() createUserDto: Prisma.UserCreateInput): Promise<User> {
-    return this.userService.create(createUserDto);
+  @MessagePattern({ cmd: 'createUser' })
+  create(@Payload() data: { createUserDto: Prisma.UserCreateInput }): Promise<User> {
+    return this.userService.create(data.createUserDto);
   }
 
-  @Get()
+  @MessagePattern({ cmd: 'findAllUsers' })
   findAll(): Promise<User[]> {
     return this.userService.findAll({});
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Promise<User> {
+  @MessagePattern({ cmd: 'findOneUser' })
+  findOne(@Payload('id') data: { id: string }): Promise<User> {
     return this.userService.findOne({
-      id,
+      id: data.id,
     });
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: Prisma.UserUpdateInput): Promise<User> {
+  @MessagePattern({ cmd: 'updateUser' })
+  update(@Payload('id') data: { id: string, updateUserDto: Prisma.UserUpdateInput }): Promise<User> {
     return this.userService.update({
       where: {
-        id,
+        id: data.id,
       },
-      data: updateUserDto,
+      data: data.updateUserDto,
     });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern({ cmd: 'removeUser' })
+  remove(@Payload('id') data: { id: string }): Promise<User> {
     return this.userService.remove({
-      id,
+      id: data.id,
     });
   }
 }
