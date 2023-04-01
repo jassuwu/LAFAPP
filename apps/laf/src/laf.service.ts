@@ -12,8 +12,13 @@ export class LafService {
   ) { }
 
 
-  getHello(): string {
-    return 'Hello World!';
+  getHello(): { error: boolean; status: string; message: string; health: string; } {
+    return {
+      error: false,
+      status: 'OK',
+      message: 'Welcome to the Lost and Found API',
+      health: 'healthy',
+    };
   }
 
   async getUsers(): Promise<User[]> {
@@ -23,6 +28,11 @@ export class LafService {
 
   async getPosts(): Promise<Post[]> {
     const observable = this.postClient.send({ cmd: 'findAllPosts' }, {});
+    return await firstValueFrom(observable);
+  }
+
+  async createPost(post: Post): Promise<Post> {
+    const observable = this.postClient.send({ cmd: 'createPost' }, post);
     return await firstValueFrom(observable);
   }
 
