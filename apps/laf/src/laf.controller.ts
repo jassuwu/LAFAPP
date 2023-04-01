@@ -18,6 +18,11 @@ export class LafController {
     return this.lafService.getUsers();
   }
 
+  @Get('user/:id')
+  getUser(@Param('id') id: string): Promise<User> {
+    return this.lafService.getUser({ id });
+  }
+
   @Post('user')
   createUser(@Body() user: User): Promise<User> {
     return this.lafService.createUser(user);
@@ -30,12 +35,17 @@ export class LafController {
 
   @Delete('user/:id')
   deleteUser(@Param('id') id: string): Promise<User> {
-    return this.lafService.deleteUser({ id });
+    return this.lafService.removeUser({ id });
   }
 
   @Get('post')
   getPosts(): Promise<PostModel[]> {
     return this.lafService.getPosts();
+  }
+
+  @Get('post/:id')
+  getPost(@Param('id') id: string): Promise<PostModel> {
+    return this.lafService.getPost({ id });
   }
 
   @Post('post')
@@ -50,7 +60,7 @@ export class LafController {
 
   @Delete('post/:id')
   deletePost(@Param('id') id: string): Promise<PostModel> {
-    return this.lafService.deletePost({ id });
+    return this.lafService.removePost(id);
   }
 
 }

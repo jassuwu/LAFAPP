@@ -36,12 +36,10 @@ export class UserController {
   }
 
   @MessagePattern({ cmd: 'removeUser' })
-  remove(@Payload() id: string): Promise<User> {
+  remove(@Payload() id: Prisma.UserWhereUniqueInput): Promise<User> {
     return this.userService.remove(
       {
-        where: {
-          id,
-        }
+        where: id,
       }
     );
   }

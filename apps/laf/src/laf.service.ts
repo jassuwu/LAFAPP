@@ -27,7 +27,7 @@ export class LafService {
   }
 
   async getUser(data: { id: string }): Promise<User> {
-    const observable = this.authClient.send({ cmd: 'findUser' }, data);
+    const observable = this.authClient.send({ cmd: 'findOneUser' }, data);
     return await firstValueFrom(observable);
   }
 
@@ -41,8 +41,8 @@ export class LafService {
     return await firstValueFrom(observable);
   }
 
-  async deleteUser(data: { id: string }): Promise<User> {
-    const observable = this.authClient.send({ cmd: 'deleteUser' }, data);
+  async removeUser(data: { id: string }): Promise<User> {
+    const observable = this.authClient.send({ cmd: 'removeUser' }, data);
     return await firstValueFrom(observable);
   }
 
@@ -52,7 +52,7 @@ export class LafService {
   }
 
   async getPost(data: { id: string }): Promise<Post> {
-    const observable = this.postClient.send({ cmd: 'findPost' }, data);
+    const observable = this.postClient.send({ cmd: 'findOnePost' }, data);
     return await firstValueFrom(observable);
   }
 
@@ -66,8 +66,8 @@ export class LafService {
     return await firstValueFrom(observable);
   }
 
-  async deletePost(data: { id: string }): Promise<Post> {
-    const observable = this.postClient.send({ cmd: 'deletePost' }, data);
+  async removePost(id: string): Promise<Post> {
+    const observable = this.postClient.send({ cmd: 'removePost' }, id);
     return await firstValueFrom(observable);
   }
 

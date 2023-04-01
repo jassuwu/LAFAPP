@@ -19,7 +19,7 @@ export class PostController {
   }
 
   @MessagePattern({ cmd: 'findOnePost' })
-  findOne(@Payload('id') data: { id: string }): Promise<PostModel> {
+  findOne(@Payload() data: { id: string }): Promise<PostModel> {
     return this.postService.findOne({
       id: data.id,
     });
