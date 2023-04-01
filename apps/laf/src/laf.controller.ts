@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User, Post as PostModel } from '@prisma/client';
 import { LafService } from './laf.service';
@@ -18,6 +18,21 @@ export class LafController {
     return this.lafService.getUsers();
   }
 
+  @Post('user')
+  createUser(@Body() user: User): Promise<User> {
+    return this.lafService.createUser(user);
+  }
+
+  @Patch('user/:id')
+  updateUser(@Param('id') id: string, @Body() user: User): Promise<User> {
+    return this.lafService.updateUser({ id, user });
+  }
+
+  @Delete('user/:id')
+  deleteUser(@Param('id') id: string): Promise<User> {
+    return this.lafService.deleteUser({ id });
+  }
+
   @Get('post')
   getPosts(): Promise<PostModel[]> {
     return this.lafService.getPosts();
@@ -28,6 +43,14 @@ export class LafController {
     return this.lafService.createPost(post);
   }
 
+  @Patch('post/:id')
+  updatePost(@Param('id') id: string, @Body() post: PostModel): Promise<PostModel> {
+    return this.lafService.updatePost({ id, post });
+  }
 
+  @Delete('post/:id')
+  deletePost(@Param('id') id: string): Promise<PostModel> {
+    return this.lafService.deletePost({ id });
+  }
 
 }
