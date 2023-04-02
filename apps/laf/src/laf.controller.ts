@@ -87,13 +87,13 @@ export class LafController {
     return this.lafService.removeUser({ id });
   }
 
-  @Get('user/:id/posts')
-  @ApiTags('user')
-  @ApiOperation({ summary: 'Get User Posts' })
-  @ApiResponse({ status: 200, description: 'Posts successfully retrieved' })
-  async getUserPosts(@Param('id') id: string): Promise<User> {
-    return this.lafService.getUserPosts({ id });
-  }
+  // @Get('user/:id/posts')
+  // @ApiTags('user')
+  // @ApiOperation({ summary: 'Get User Posts' })
+  // @ApiResponse({ status: 200, description: 'Posts successfully retrieved' })
+  // async getUserPosts(@Param('id') id: string): Promise<User> {
+  //   return this.lafService.getUserPosts({ id });
+  // }
 
   @Get('user/:id/postcount')
   @ApiTags('user')
@@ -151,7 +151,7 @@ export class LafController {
           type: 'boolean',
           default: false,
         },
-        authorId: {
+        author: {
           type: 'object',
           properties: {
             connect: {
