@@ -46,7 +46,6 @@ export class PostService {
       data,
       where,
     });
-
   }
 
   async remove(params: {
@@ -57,4 +56,68 @@ export class PostService {
       where,
     });
   }
+
+  async getUserPostCount(
+    params: {
+      where: {
+        authorId: string
+      },
+    }
+  ): Promise<number> {
+    const { where } = params;
+    return this.prisma.post.count({
+      where,
+    })
+  }
+
+  async getUserPublishedPostCount(
+    params: {
+      where: {
+        authorId: string
+        published: boolean
+      },
+    }
+  ): Promise<number> {
+    const { where } = params;
+    return this.prisma.post.count({
+      where,
+    })
+  }
+
+  async getUnpublishedPosts(
+    params: {
+      where: {
+        published: boolean
+      },
+    }
+  ): Promise<Post[]> {
+    const { where } = params;
+    return this.prisma.post.findMany({
+      where,
+    })
+  }
+
+  async publishPost(params: {
+    where: Prisma.PostWhereUniqueInput;
+  }): Promise<Post> {
+    const { where } = params;
+    return this.prisma.post.update({
+      where,
+      data: {
+        published: true,
+      }
+    });
+  }
+
+  async getPostsByAuthor(params: {
+    where: {
+      authorId: string
+    },
+  }): Promise<Post[]> {
+    const { where } = params;
+    return this.prisma.post.findMany({
+      where,
+    })
+  }
+
 }

@@ -45,4 +45,62 @@ export class PostController {
       }
     );
   }
+
+  @MessagePattern({ cmd: 'getUserPostCount' })
+  async getUserPostCount(@Payload() id: string): Promise<number> {
+    return this.postService.getUserPostCount(
+      {
+        where: {
+          authorId: id,
+        },
+      }
+    )
+  }
+
+  @MessagePattern({ cmd: 'getUserPublishedPostCount' })
+  async getUserPublishedPostCount(@Payload() id: string): Promise<number> {
+    return this.postService.getUserPublishedPostCount(
+      {
+        where: {
+          authorId: id,
+          published: true,
+        },
+      }
+    )
+  }
+
+  @MessagePattern({ cmd: 'getUnpublishedPosts' })
+  async getUnpublishedPosts(): Promise<PostModel[]> {
+    return this.postService.getUnpublishedPosts(
+      {
+        where: {
+          published: false,
+        },
+      }
+    )
+  }
+
+  @MessagePattern({ cmd: 'publishPost' })
+  async publishPost(@Payload() id: string): Promise<PostModel> {
+    return this.postService.publishPost(
+      {
+        where: {
+          id,
+        },
+      }
+    )
+  }
+
+
+  @MessagePattern({ cmd: 'getPostsByAuthor' })
+  async getPostsByAuthor(@Payload() id: string): Promise<PostModel[]> {
+    return this.postService.getPostsByAuthor(
+      {
+        where: {
+          authorId: id,
+        },
+      }
+    )
+  }
+
 }

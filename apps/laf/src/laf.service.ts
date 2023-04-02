@@ -46,6 +46,21 @@ export class LafService {
     return await firstValueFrom(observable);
   }
 
+  async getUserPosts(data: { id: string }): Promise<User> {
+    const observable = this.authClient.send({ cmd: 'getUserPosts' }, data);
+    return await firstValueFrom(observable);
+  }
+
+  async getUserPostCount(id: string): Promise<number> {
+    const observable = this.postClient.send({ cmd: 'getUserPostCount' }, id);
+    return await firstValueFrom(observable);
+  }
+
+  async getUserPublishedPostCount(id: string): Promise<number> {
+    const observable = this.postClient.send({ cmd: 'getUserPublishedPostCount' }, id);
+    return await firstValueFrom(observable);
+  }
+
   async getPosts(): Promise<Post[]> {
     const observable = this.postClient.send({ cmd: 'findAllPosts' }, {});
     return await firstValueFrom(observable);
@@ -68,6 +83,21 @@ export class LafService {
 
   async removePost(id: string): Promise<Post> {
     const observable = this.postClient.send({ cmd: 'removePost' }, id);
+    return await firstValueFrom(observable);
+  }
+
+  async getUnpublishedPosts(): Promise<Post[]> {
+    const observable = this.postClient.send({ cmd: 'getUnpublishedPosts' }, {});
+    return await firstValueFrom(observable);
+  }
+
+  async publishPost(id: string): Promise<Post> {
+    const observable = this.postClient.send({ cmd: 'publishPost' }, id);
+    return await firstValueFrom(observable);
+  }
+
+  async getPostsByAuthor(id: string): Promise<Post[]> {
+    const observable = this.postClient.send({ cmd: 'getPostsByAuthor' }, id);
     return await firstValueFrom(observable);
   }
 

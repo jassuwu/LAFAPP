@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { Prisma, User } from '@prisma/client';
+import { Post, Prisma, User } from '@prisma/client';
 import { UserService } from './user.service';
 
 @Controller('api/user')
@@ -43,4 +43,5 @@ export class UserController {
       }
     );
   }
+
 }
